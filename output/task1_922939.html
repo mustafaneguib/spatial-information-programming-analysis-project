@@ -1,0 +1,627 @@
+
+    <html>
+     <head>
+            <title>Task 1 922939</title>
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">            
+            <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+     </head>
+       <body>
+         <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+          <a class="navbar-brand" href="#">Spatial Information Programming Assignment 2 Task 1 922939</a>
+          <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+        <main role="main" class="container" style="margin-top: 80px;">
+         <div class="row">
+            <div class="col-md-12">
+                <h5>
+                    Project and report developed by Mustafa Neguib with student number 922939
+                </h5>
+            </div>
+          </div>
+              
+    <div class="row">
+        <div class="col-md-12">
+            <h5>
+            Question 1 -- Calculating the average number of accidents per year
+            </h5>
+            <p>
+            Average number of accidents per year: 13788.55
+            </p>
+        </div>
+    </div>
+    
+        
+    <div class="row">
+        <div class="col-md-12">
+            <h5>
+            Question 2 -- Number and proportion of the second most common type of accidents
+            </h5>
+            <p>
+            The second most common type of accident in all the recorded years is 'Collision with a fixed object', and the percentage of the accidents that belong to this type is 16.56%
+            </p>
+        </div>
+    </div>
+    
+        
+    <div class="row">
+        <div class="col-md-12">
+            <h5>
+            Question 3 -- Number of accidents by vehicle type by year
+            </h5>
+            <p>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>YEAR</th>
+      <th>2006</th>
+      <th>2007</th>
+      <th>2008</th>
+      <th>2009</th>
+      <th>2010</th>
+      <th>2011</th>
+      <th>2012</th>
+      <th>2013</th>
+      <th>2014</th>
+      <th>2015</th>
+      <th>2016</th>
+    </tr>
+    <tr>
+      <th>Vehicle Type Desc</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Bicycle</th>
+      <td>1256.0</td>
+      <td>1312.0</td>
+      <td>1384.0</td>
+      <td>1488.0</td>
+      <td>1496.0</td>
+      <td>1577.0</td>
+      <td>1427.0</td>
+      <td>1567.0</td>
+      <td>1615.0</td>
+      <td>1556.0</td>
+      <td>1334.0</td>
+    </tr>
+    <tr>
+      <th>Bus/Coach</th>
+      <td>106.0</td>
+      <td>133.0</td>
+      <td>125.0</td>
+      <td>153.0</td>
+      <td>123.0</td>
+      <td>168.0</td>
+      <td>133.0</td>
+      <td>137.0</td>
+      <td>127.0</td>
+      <td>136.0</td>
+      <td>99.0</td>
+    </tr>
+    <tr>
+      <th>Car</th>
+      <td>13395.0</td>
+      <td>13178.0</td>
+      <td>13640.0</td>
+      <td>13075.0</td>
+      <td>12846.0</td>
+      <td>13189.0</td>
+      <td>13088.0</td>
+      <td>13543.0</td>
+      <td>14672.0</td>
+      <td>12977.0</td>
+      <td>12204.0</td>
+    </tr>
+    <tr>
+      <th>Heavy Vehicle (Rigid) &gt; 4.5 Tonnes</th>
+      <td>263.0</td>
+      <td>387.0</td>
+      <td>394.0</td>
+      <td>305.0</td>
+      <td>298.0</td>
+      <td>355.0</td>
+      <td>297.0</td>
+      <td>309.0</td>
+      <td>268.0</td>
+      <td>352.0</td>
+      <td>277.0</td>
+    </tr>
+    <tr>
+      <th>Horse (ridden or drawn)</th>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>2.0</td>
+      <td>1.0</td>
+      <td>6.0</td>
+      <td>2.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>Light Commercial Vehicle (Rigid) &lt;= 4.5 Tonnes GVM</th>
+      <td>204.0</td>
+      <td>249.0</td>
+      <td>255.0</td>
+      <td>226.0</td>
+      <td>266.0</td>
+      <td>272.0</td>
+      <td>215.0</td>
+      <td>204.0</td>
+      <td>172.0</td>
+      <td>183.0</td>
+      <td>206.0</td>
+    </tr>
+    <tr>
+      <th>Mini Bus(9-13 seats)</th>
+      <td>23.0</td>
+      <td>16.0</td>
+      <td>29.0</td>
+      <td>27.0</td>
+      <td>15.0</td>
+      <td>21.0</td>
+      <td>27.0</td>
+      <td>13.0</td>
+      <td>12.0</td>
+      <td>23.0</td>
+      <td>13.0</td>
+    </tr>
+    <tr>
+      <th>Moped</th>
+      <td>12.0</td>
+      <td>18.0</td>
+      <td>16.0</td>
+      <td>14.0</td>
+      <td>14.0</td>
+      <td>19.0</td>
+      <td>15.0</td>
+      <td>16.0</td>
+      <td>20.0</td>
+      <td>16.0</td>
+      <td>25.0</td>
+    </tr>
+    <tr>
+      <th>Motor Cycle</th>
+      <td>1818.0</td>
+      <td>1951.0</td>
+      <td>2076.0</td>
+      <td>1963.0</td>
+      <td>1759.0</td>
+      <td>1817.0</td>
+      <td>1816.0</td>
+      <td>1969.0</td>
+      <td>2073.0</td>
+      <td>2077.0</td>
+      <td>1888.0</td>
+    </tr>
+    <tr>
+      <th>Motor Scooter</th>
+      <td>54.0</td>
+      <td>118.0</td>
+      <td>143.0</td>
+      <td>137.0</td>
+      <td>145.0</td>
+      <td>131.0</td>
+      <td>112.0</td>
+      <td>126.0</td>
+      <td>111.0</td>
+      <td>109.0</td>
+      <td>104.0</td>
+    </tr>
+    <tr>
+      <th>Not Applicable</th>
+      <td>2.0</td>
+      <td>2.0</td>
+      <td>1.0</td>
+      <td>2.0</td>
+      <td>5.0</td>
+      <td>0.0</td>
+      <td>2.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>Other Vehicle</th>
+      <td>73.0</td>
+      <td>85.0</td>
+      <td>79.0</td>
+      <td>70.0</td>
+      <td>54.0</td>
+      <td>59.0</td>
+      <td>62.0</td>
+      <td>71.0</td>
+      <td>58.0</td>
+      <td>22.0</td>
+      <td>47.0</td>
+    </tr>
+    <tr>
+      <th>Panel Van</th>
+      <td>621.0</td>
+      <td>533.0</td>
+      <td>526.0</td>
+      <td>530.0</td>
+      <td>508.0</td>
+      <td>499.0</td>
+      <td>581.0</td>
+      <td>541.0</td>
+      <td>564.0</td>
+      <td>542.0</td>
+      <td>540.0</td>
+    </tr>
+    <tr>
+      <th>Parked trailers</th>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>6.0</td>
+      <td>15.0</td>
+      <td>10.0</td>
+      <td>3.0</td>
+    </tr>
+    <tr>
+      <th>Plant machinery and Agricultural equipment</th>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>10.0</td>
+      <td>14.0</td>
+      <td>23.0</td>
+      <td>23.0</td>
+      <td>14.0</td>
+    </tr>
+    <tr>
+      <th>Prime Mover (No of Trailers Unknown)</th>
+      <td>342.0</td>
+      <td>292.0</td>
+      <td>4.0</td>
+      <td>3.0</td>
+      <td>7.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>Prime Mover - Single Trailer</th>
+      <td>2.0</td>
+      <td>1.0</td>
+      <td>241.0</td>
+      <td>209.0</td>
+      <td>218.0</td>
+      <td>214.0</td>
+      <td>232.0</td>
+      <td>199.0</td>
+      <td>214.0</td>
+      <td>220.0</td>
+      <td>170.0</td>
+    </tr>
+    <tr>
+      <th>Prime Mover B-Double</th>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>76.0</td>
+      <td>78.0</td>
+      <td>96.0</td>
+      <td>96.0</td>
+      <td>102.0</td>
+      <td>94.0</td>
+      <td>65.0</td>
+      <td>92.0</td>
+      <td>75.0</td>
+    </tr>
+    <tr>
+      <th>Prime Mover B-Triple</th>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>2.0</td>
+      <td>0.0</td>
+      <td>2.0</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>Prime Mover Only</th>
+      <td>11.0</td>
+      <td>13.0</td>
+      <td>21.0</td>
+      <td>26.0</td>
+      <td>32.0</td>
+      <td>43.0</td>
+      <td>40.0</td>
+      <td>51.0</td>
+      <td>51.0</td>
+      <td>39.0</td>
+      <td>56.0</td>
+    </tr>
+    <tr>
+      <th>Quad Bike</th>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>2.0</td>
+      <td>7.0</td>
+      <td>9.0</td>
+      <td>21.0</td>
+      <td>9.0</td>
+      <td>14.0</td>
+    </tr>
+    <tr>
+      <th>Rigid Truck(Weight Unknown)</th>
+      <td>93.0</td>
+      <td>33.0</td>
+      <td>20.0</td>
+      <td>20.0</td>
+      <td>12.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>Station Wagon</th>
+      <td>3105.0</td>
+      <td>3168.0</td>
+      <td>3331.0</td>
+      <td>3324.0</td>
+      <td>3541.0</td>
+      <td>3659.0</td>
+      <td>3795.0</td>
+      <td>3102.0</td>
+      <td>2776.0</td>
+      <td>4494.0</td>
+      <td>4517.0</td>
+    </tr>
+    <tr>
+      <th>Taxi</th>
+      <td>311.0</td>
+      <td>363.0</td>
+      <td>389.0</td>
+      <td>350.0</td>
+      <td>321.0</td>
+      <td>319.0</td>
+      <td>291.0</td>
+      <td>306.0</td>
+      <td>325.0</td>
+      <td>255.0</td>
+      <td>210.0</td>
+    </tr>
+    <tr>
+      <th>Train</th>
+      <td>15.0</td>
+      <td>5.0</td>
+      <td>9.0</td>
+      <td>5.0</td>
+      <td>3.0</td>
+      <td>6.0</td>
+      <td>12.0</td>
+      <td>6.0</td>
+      <td>5.0</td>
+      <td>3.0</td>
+      <td>5.0</td>
+    </tr>
+    <tr>
+      <th>Tram</th>
+      <td>53.0</td>
+      <td>74.0</td>
+      <td>82.0</td>
+      <td>76.0</td>
+      <td>80.0</td>
+      <td>69.0</td>
+      <td>53.0</td>
+      <td>54.0</td>
+      <td>40.0</td>
+      <td>71.0</td>
+      <td>37.0</td>
+    </tr>
+    <tr>
+      <th>Unknown</th>
+      <td>209.0</td>
+      <td>180.0</td>
+      <td>185.0</td>
+      <td>160.0</td>
+      <td>171.0</td>
+      <td>257.0</td>
+      <td>458.0</td>
+      <td>542.0</td>
+      <td>563.0</td>
+      <td>619.0</td>
+      <td>447.0</td>
+    </tr>
+    <tr>
+      <th>Utility</th>
+      <td>1487.0</td>
+      <td>1524.0</td>
+      <td>1565.0</td>
+      <td>1674.0</td>
+      <td>1796.0</td>
+      <td>1805.0</td>
+      <td>1914.0</td>
+      <td>1808.0</td>
+      <td>1794.0</td>
+      <td>2170.0</td>
+      <td>2043.0</td>
+    </tr>
+  </tbody>
+</table>
+            </p>
+        </div>
+    </div>
+    
+        
+    <div class="row">
+        <div class="col-md-12">
+            <h5>
+            Question 4 -- Top 10 local government areas
+            </h5>
+            <p>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>LGA_NAME</th>
+      <th>NUM_2006</th>
+      <th>NUM_2016</th>
+      <th>DIFFERENCE</th>
+      <th>CHANGE</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>MELBOURNE</td>
+      <td>862</td>
+      <td>763</td>
+      <td>-99</td>
+      <td>-11.484919</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>CASEY</td>
+      <td>516</td>
+      <td>606</td>
+      <td>90</td>
+      <td>17.441860</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>DANDENONG</td>
+      <td>478</td>
+      <td>516</td>
+      <td>38</td>
+      <td>7.949791</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>GEELONG</td>
+      <td>468</td>
+      <td>503</td>
+      <td>35</td>
+      <td>7.478632</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>YARRA RANGES</td>
+      <td>443</td>
+      <td>410</td>
+      <td>-33</td>
+      <td>-7.449210</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>MONASH</td>
+      <td>418</td>
+      <td>373</td>
+      <td>-45</td>
+      <td>-10.765550</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>KINGSTON</td>
+      <td>384</td>
+      <td>306</td>
+      <td>-78</td>
+      <td>-20.312500</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>MORELAND</td>
+      <td>368</td>
+      <td>382</td>
+      <td>14</td>
+      <td>3.804348</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>MORNINGTON PENINSULA</td>
+      <td>355</td>
+      <td>294</td>
+      <td>-61</td>
+      <td>-17.183099</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>BRIMBANK</td>
+      <td>348</td>
+      <td>416</td>
+      <td>68</td>
+      <td>19.540230</td>
+    </tr>
+  </tbody>
+</table>
+            </p>
+        </div>
+    </div>
+    
+        
+    <div class="row">
+        <div class="col-md-12">
+            <h5>
+            Question 5 -- Accident numbers by days of the week in 2006 and 2016
+            </h5>
+            <p>
+            
+            <img src='file:\D:\university of melbourne lectures\semester 4\Spatial Information Programming\Assignments\Assignment 2\notebook\project\output\accidents_by_day_week.png' style='width:50%;' />
+    
+            </p>
+        </div>
+    </div>
+    
+        
+    <div class="row">
+        <div class="col-md-12">
+            <h5>
+            Question 6 -- Yearly change of the number of accidents from 2006 to 2016 for each severity category
+            </h5>
+            <p>
+            
+            <img src='file:\D:\university of melbourne lectures\semester 4\Spatial Information Programming\Assignments\Assignment 2\notebook\project\output\yearly_change_tot_num_2006_to_2016.png' style='width:50%;' />
+    
+            </p>
+        </div>
+    </div>
+    
+    
+          </main>  
+       </body>    
+    </html>
+    

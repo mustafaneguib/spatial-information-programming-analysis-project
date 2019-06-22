@@ -124,7 +124,122 @@ def read_shape_file(shape_file_name, required_columns):
                                                                                   shape_file_name))
 
 
-# The following functions are for driving the questions in Task 1
+def create_output_directory():
+    # This function is the first one to run, so we want to make sure that the output folder is
+    # created before all other functions run.
+    try:
+        os.mkdir("output")
+    except FileExistsError:
+        # The folder already exists, so do nothing.
+        pass
+
+
+def write_to_html_file(html_content, file_name, page_title):
+    """
+    This function writes the html string to an html file. This function also ensures
+    that the folder output exists.
+    :param html_content: html string containing the content to write to the file
+    :param file_name: string name for the file
+    :param page_title: string title for the page
+    """
+    execution_halted_str = 'Execution halted in the function write_to_html_file!!!'
+    path_of_directory = os.path.join(os.getcwd(), "output")
+    path_of_file = os.path.join(os.getcwd(), "output", file_name)
+    if os.path.exists(path_of_directory):
+        with open(path_of_file, 'w') as writeFile:
+            writeFile.write(build_html_string(html_content, page_title))
+    else:
+        raise FileNotFoundError(
+            "{} The file {} was not found in the current directory.".format(execution_halted_str,
+                                                                            path_of_directory))
+
+
+def write_to_shape_file(dataframe, file_name):
+    """
+    This function writes the dataframe to a shape file. This function also ensures
+    that the folder output exists.
+    :param dataframe: geopandas dataframe
+    :param file_name: string name for the file
+    :return: string path to the file
+    """
+    execution_halted_str = 'Execution halted in the function write_to_shape_file!!!'
+    path_of_directory = os.path.join(os.getcwd(), "output")
+    path_of_file = os.path.join(os.getcwd(), "output", file_name)
+    if os.path.exists(path_of_directory):
+        dataframe.to_file(path_of_file)
+        return path_of_file
+    else:
+        raise FileNotFoundError(
+            "{} The file {} was not found in the current directory.".format(execution_halted_str,
+                                                                            path_of_directory))
+
+
+def write_to_image_file(figure, file_name, more_options, dpi):
+    """
+    This function writes an image file. This function also ensures
+    that the folder output exists.
+    :param figure: matplotlib figure
+    :param file_name: string name of the file
+    :param more_options: boolean whether we want more options or not
+    :param dpi: int value for the dpi
+    :return: string path to the file
+    """
+    execution_halted_str = 'Execution halted in the function write_to_image_file!!!'
+    path_of_directory = os.path.join(os.getcwd(), "output")
+    path_of_file = os.path.join(os.getcwd(), "output", file_name)
+    if os.path.exists(path_of_directory):
+        if more_options:
+            figure.savefig(path_of_file, dpi=dpi, cmap='summer', edgecolor='black', linewidth=0.2, alpha=1,
+                           bbox_inches='tight')
+        else:
+            figure.savefig(path_of_file, dpi=dpi, bbox_inches='tight')
+        return path_of_file
+    else:
+        raise FileNotFoundError(
+            "{} The file {} was not found in the current directory.".format(execution_halted_str,
+                                                                            path_of_directory))
+
+
+def write_to_csv_file(dataframe, file_name):
+    """
+    This function writes the dataframe to a csv file. This function also ensures
+    that the folder output exists.
+    :param dataframe: geopandas dataframe
+    :param file_name: string name for the file
+    :return: string path to the file
+    """
+    execution_halted_str = 'Execution halted in the function write_to_csv_file!!!'
+    path_of_directory = os.path.join(os.getcwd(), "output")
+    path_of_file = os.path.join(os.getcwd(), "output", file_name)
+    if os.path.exists(path_of_directory):
+        dataframe.to_csv(path_of_file)
+        return path_of_file
+    else:
+        raise FileNotFoundError(
+            "{} The file {} was not found in the current directory.".format(execution_halted_str,
+                                                                            path_of_directory))
+
+    # The following functions are for driving the questions in Task 1
+
+
+def write_folium_to_html_file(folium_obj, file_name):
+    """
+    This function writes the folium map to an html file.
+    :param folium_obj: folium object
+    :param file_name: string name of the file
+    :return: string path to the file
+    """
+    execution_halted_str = 'Execution halted in the function write_folium_to_html_file!!!'
+    path_of_directory = os.path.join(os.getcwd(), "output")
+    path_of_file = os.path.join(os.getcwd(), "output", file_name)
+    if os.path.exists(path_of_directory):
+        folium_obj.save(path_of_file)
+        return path_of_file
+    else:
+        raise FileNotFoundError(
+            "{} The file {} was not found in the current directory.".format(execution_halted_str,
+                                                                            path_of_directory))
+
 
 def calculate_accident_statistics(accidents_data_frame):
     """
@@ -186,7 +301,7 @@ def calculate_accident_statistics(accidents_data_frame):
 def generate_accidents_by_type_and_year(accidents_data_frame_few_columns, vehicles_data_frame):
     """
     This function generates a table for accident data which is listed by
-    teh vehicle type and year. The return value is a HTML string which is
+    the vehicle type and year. The return value is a HTML string which is
     the table formatted as a HTML table.
     :param accidents_with_vehicles:
     :return: html_string, accidents_with_vehicles
@@ -201,8 +316,9 @@ def generate_accidents_by_type_and_year(accidents_data_frame_few_columns, vehicl
     grouped = group_by_data(accidents_with_vehicles, ['Vehicle Type Desc', 'YEAR'])
     pivoted_table = grouped.pivot(index='Vehicle Type Desc', columns='YEAR', values='count')
     pivoted_table.fillna(0, inplace=True)
-    pivoted_table.to_csv('output/AccidentByYear.csv')
-
+    # pivoted_table.to_csv('output/AccidentByYear.csv')
+    write_to_csv_file(pivoted_table, "AccidentByYear.csv")
+    print(pivoted_table)
     return build_html_component(pivoted_table.to_html(),
                                 "Question 3 -- Number of accidents by vehicle type by year"), accidents_with_vehicles
 
@@ -246,8 +362,9 @@ def compute_top10_lga_accidents(accidents_data_frame, node_data_frame):
         'NUM_2006']
     merged_2006_2016_lgas['CHANGE'] = ((merged_2006_2016_lgas['NUM_2016'] - merged_2006_2016_lgas[
         'NUM_2006']) / merged_2006_2016_lgas['NUM_2006']) * 100
-    merged_2006_2016_lgas.to_csv('output/AccidentByLGA.csv')
-
+    # merged_2006_2016_lgas.to_csv('output/AccidentByLGA.csv')
+    write_to_csv_file(merged_2006_2016_lgas, "AccidentByLGA.csv")
+    print(merged_2006_2016_lgas)
     return build_html_component(merged_2006_2016_lgas.to_html(),
                                 "Question 4 -- Top 10 local government areas")
 
@@ -276,11 +393,11 @@ def plot_accidents_by_day_week(accidents_data_frame):
     image_link = build_bar_chart_with_two_bars_per_label(num_days_2006, num_days_2016, '2006', '2016', days_2006_labels,
                                                          days_2016_labels,
                                                          'Accident numbers by days of the week, in 2006 and 2016',
-                                                         'Years', 'No of Accidents', 'accidents_by_day_week.jpg')
+                                                         'Years', 'No of Accidents', 'accidents_by_day_week.png')
 
     image_link = """
-            <img src='{0}' style='width:50%;' />
-    """.format(image_link)
+            <img src='file:{1}{0}' style='width:50%;' />
+    """.format(image_link, os.sep)
     return build_html_component(image_link, "Question 5 -- Accident numbers by days of the week in 2006 and 2016")
 
 
@@ -373,11 +490,11 @@ def plot_accidents_by_severity_year(accidents_data_frame):
                                                            2016,
                                                            'Yearly change of the total number of accidents from 2006 to 2016',
                                                            'Years', 'Percentage Change in Number of Accidents',
-                                                           'yearly_change_tot_num_2006_to_2016.jpg')
+                                                           'yearly_change_tot_num_2006_to_2016.png')
 
     image_link = """
-            <img src='{0}' style='width:50%;' />
-    """.format(image_link)
+            <img src='file:{1}{0}' style='width:50%;' />
+    """.format(image_link, os.sep)
     return build_html_component(image_link,
                                 "Question 6 -- Yearly change of the number of accidents from 2006 to 2016 for each severity category")
 
@@ -459,9 +576,9 @@ def build_bar_chart_with_two_bars_per_label(series1, series2, series1_label, ser
     ax.set_title(title)
     ax.legend(loc='upper right', frameon=True)
     plt.show()
-    output_file_name = "output/" + output_file_name
-    fig.savefig(output_file_name, dpi=300, bbox_inches='tight')
-    return '../{}'.format(output_file_name)
+    # fig.savefig(output_file_name, dpi=300, bbox_inches='tight')
+    # return '../{}'.format(output_file_name)
+    return "{}".format(write_to_image_file(fig, output_file_name, False, 300))
 
 
 def build_line_chart_with_multiple_categories(data, categories, start_index,
@@ -513,9 +630,10 @@ def build_line_chart_with_multiple_categories(data, categories, start_index,
     ax.set_title(title)
     ax.legend(loc='upper right', frameon=True)
     plt.show()
-    output_file_name = "output/" + output_file_name
-    fig.savefig(output_file_name, dpi=300, bbox_inches='tight')
-    return '../{}'.format(output_file_name)
+    # fig.savefig(output_file_name, dpi=300, bbox_inches='tight')
+    # write_to_image_file(fig, output_file_name, False, 300)
+    # return '../{}'.format(output_file_name)
+    return "{}".format(write_to_image_file(fig, output_file_name, False, 300))
 
 
 def build_html_string(html_string, page_title):
@@ -610,8 +728,7 @@ def build_html_component(html_string, title):
     :param title: Title of the html component
     :return: html_string
     """
-    html = """
-    
+    html = """    
     <div class="row">
         <div class="col-md-12">
             <h5>
@@ -628,11 +745,102 @@ def build_html_component(html_string, title):
     return html
 
 
-def write_to_file(html_content, file_name, page_title):
-    file_name = "output/" + file_name
-    path = os.path.join(os.getcwd(), file_name)
-    with open(path, 'w') as writeFile:
-        writeFile.write(build_html_string(html_content, page_title))
+def html_layout_full_width(content):
+    """
+    This function generates full width column rows.
+    :param content: A list of items containing the items to show
+    :return: html string
+    """
+    html_content = ""
+    for item in content:
+        html_content += """
+            <br />
+            <div class='row'>
+                <div class='col-md-12'>
+                    <img src='file:{2}{0}' class='img-fluid'/>
+                    <center>
+                        <label>
+                            {1}
+                        </label>
+                    </center>
+                </div>
+            </div>
+            <br />
+            """.format(item[0], item[1], os.sep)
+    return html_content
+
+
+def html_layout_full_width_single_row(content):
+    """
+    This function generates a single full width column row.
+    :param content: A list of items containing the items to show
+    :return: html string
+    """
+    html_content = ""
+    for item in content:
+        html_content += """
+            <div class='row'>
+                <div class='col-md-12'>
+                {0}
+                </div>
+            </div>
+            <br />
+            """.format(item[0])
+    return html_content
+
+
+def html_layout_quarter_width(content):
+    """
+    This function generates a quarter width column row.
+    :param content: A list of items containing the items to show
+    :return: html string
+    """
+    html_string = ""
+    for item in content:
+        html_string += """
+               <div class='col-md-4'>
+                   <center>
+                       {0}
+                       <br />
+                       {1}
+                   </center>
+               </div>
+           """.format(item[0], item[1])
+    html_content = """
+           <br />
+           <div class='row'>
+               {0}
+           </div>
+           <br />
+       """.format(html_string)
+    return html_content
+
+
+def html_layout_half_width(content):
+    """
+    This function generates a half width column row.
+    :param content: A list of items containing the items to show
+    :return: html string
+    """
+    html_string = ""
+    for item in content:
+        html_string += """
+            <div class='col-md-6'>
+                <center>
+                    {0}
+                    <br />
+                    {1}
+                </center>
+            </div>
+        """.format(item[0], item[1])
+    html_content = """
+        <br />
+        <div class='row'>
+            {0}
+        </div>
+        <br />
+    """.format(html_string)
+    return html_content
 
 
 def build_geometry(data):
@@ -678,10 +886,17 @@ def build_accident_locations_shape_file(accidents_data_frame, vehicles_data_fram
     accidents_locations = accidents_locations.drop(['Lat', 'Long'], axis=1)
     accidents_locations = geopandas.GeoDataFrame(accidents_locations, geometry=accidents_locations.geometry)
     accidents_locations.crs = {'init': 'epsg:4326', 'no_defs': True}
-    accidents_locations.to_file('output/AccidentsLocation.shp')
+    # accidents_locations.to_file('output/AccidentsLocation.shp')
+    write_to_shape_file(accidents_locations, "AccidentsLocation.shp")
 
 
 def build_weekday_weekend_shape_files(accidents_locations):
+    """
+    This function extracts the severe accidents from the data frame and then filters them out into weekdays
+    and weekend shape files.
+    :param accidents_locations:
+    :return:
+    """
     severe_accident_weekday = accidents_locations[
         (accidents_locations.DayOfWeek.isin(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'])) & (
                 accidents_locations.SevereAcci == 1)]
@@ -691,8 +906,10 @@ def build_weekday_weekend_shape_files(accidents_locations):
     severe_accident_weekday = severe_accident_weekday.drop('index', axis=1)
     severe_accident_weekend.reset_index(inplace=True)
     severe_accident_weekend = severe_accident_weekend.drop('index', axis=1)
-    severe_accident_weekday.to_file('output/SevereAccidentWeekday.shp')
-    severe_accident_weekend.to_file('output/SevereAccidentWeekend.shp')
+    # severe_accident_weekday.to_file('output/SevereAccidentWeekday.shp')
+    # severe_accident_weekend.to_file('output/SevereAccidentWeekend.shp')
+    write_to_shape_file(severe_accident_weekday, "SevereAccidentWeekday.shp")
+    write_to_shape_file(severe_accident_weekend, "SevereAccidentWeekend.shp")
 
 
 def add_sa2_names_to_accidents_locations_shape_file_sjoin(sa2):
@@ -854,7 +1071,8 @@ def categorizeTypeOfDay(x):
 
 def spatial_visual_analysis(accidents_locations, sa2_areas_of_interest, html_content):
     """
-
+    This function generates the maps showing number of accidents in SA2 areas for on weekdays and weekends , weekdays and weekends
+    from 2006 to 2016.
     :param accidents_locations: geopandas geodataframe containing data related to accident locations
     :param sa2_areas_of_interest: geopandas geodataframe containing data related to the sa2 regions that have been filtered out.
     :param html_content: string containing html content
@@ -875,8 +1093,8 @@ def spatial_visual_analysis(accidents_locations, sa2_areas_of_interest, html_con
     ax.set_title('Number of accidents in each SA2 for 2006 to 2016')
     sa2_with_accident_counts.plot(column='NUM_ACCIDENTS', ax=ax, edgecolor='k',
                                   scheme="quantiles", k=10, cmap='summer', legend=True, linewidth=0.2)
-    fig.savefig('output/num_accidents_sa2.jpg', dpi=500, cmap='summer', edgecolor='black', linewidth=0.2, alpha=1,
-                bbox_inches='tight')
+    # fig.savefig('output/num_accidents_sa2.png', dpi=500, cmap='summer', edgecolor='black', linewidth=0.2, alpha=1, bbox_inches='tight')
+    num_accidents_sa2_file_name = write_to_image_file(fig, "num_accidents_sa2.png", True, 500)
 
     # I am building the data for number of accidents that took place on a week day and a weekend
     accidents_locations['TypeOfDayOfWeek'] = accidents_locations.DayOfWeek.apply(categorizeTypeOfDay)
@@ -899,62 +1117,34 @@ def spatial_visual_analysis(accidents_locations, sa2_areas_of_interest, html_con
     ax.set_title('Number of accidents in each SA2 for 2006 to 2016 during the weekdays')
     sa2_with_week_day_type_weekday.plot(column='NUM_ACCIDENTS', ax=ax, edgecolor='k',
                                         scheme="quantiles", k=10, cmap='summer', legend=True, linewidth=0.2)
-    fig.savefig('output/num_accidents_sa2_weekday.jpg', dpi=500, cmap='summer', edgecolor='black', linewidth=0.2,
-                alpha=1, bbox_inches='tight')
+    # fig.savefig('output/num_accidents_sa2_weekday.png', dpi=500, cmap='summer', edgecolor='black', linewidth=0.2, alpha=1, bbox_inches='tight')
+    num_accidents_sa2_weekday_file_name = write_to_image_file(fig, "num_accidents_sa2_weekday.png", True, 500)
 
     fig, ax = plt.subplots(1, 1, figsize=(20, 20))
     ax.axis('off')
     ax.set_title('Number of accidents in each SA2 for 2006 to 2016 during the weekends (Saturday and Sunday)')
     sa2_with_week_day_type_weekend.plot(column='NUM_ACCIDENTS', ax=ax, edgecolor='k',
                                         scheme="quantiles", k=10, cmap='summer', legend=True, linewidth=0.2)
-    fig.savefig('output/num_accidents_sa2_weekend.jpg', dpi=500, cmap='summer', edgecolor='black', linewidth=0.2,
-                alpha=1, bbox_inches='tight')
+    # fig.savefig('output/num_accidents_sa2_weekend.png', dpi=500, cmap='summer', edgecolor='black', linewidth=0.2, alpha=1, bbox_inches='tight')
+    num_accidents_sa2_weekend_file_name = write_to_image_file(fig, "num_accidents_sa2_weekend.png", True, 500)
 
-    image_link = """
-    <div class='row'>
-        <div class='col-md-12'>
-            <img src='{0}' class='img-fluid'/>
-            <br />
-            <center>
-                <label>
-                    Figure 1: The figure shows the number of accidents that took place from 2006 to 2017 during both 
-                    the weekdays and the weekends. Do note the bins in the legends.
-                </label>
-            </center>
-
-        </div>
-    </div>
-    <br />
-    <div class='row'>
-        <div class='col-md-12'>
-            <img src='{1}' class='img-fluid'/>
-            <br />
-            <center>
-                <label>
-                    Figure 2: The figure shows the number of accidents that took place from 2006 to 2017 during the weekdays. 
-                    Do note the bins in the legends. The maximum number of accident is less than what we have in Figure 1.
-                </label>
-            </center>
-        </div>
-    </div>    
-    <div class='row'>    
-        <div class='col-md-12'>
-            <img src='{2}' class='img-fluid'/>
-            <center>
-                <label>
-                    Figure 3: The figure shows the number of accidents that took place from 2006 to 2017 during the weekend. 
-                    Do note the bins in the legends. The maximum number of accident is less than what we have in Figure 1.
-                    The bins tell that there were alot more fewer accidents on the weekends than on the weekdays and also as an
-                    overall total.
-                </label>
-            </center>
-        </div>
-    </div>
-
-    """.format('num_accidents_sa2.jpg', 'num_accidents_sa2_weekday.jpg', 'num_accidents_sa2_weekend.jpg')
+    content = [[num_accidents_sa2_file_name,
+                "Figure 1: The figure shows the number of accidents that took place from 2006 to 2017 during both the weekdays and the weekends. Do note the bins in the legends."],
+               [num_accidents_sa2_weekday_file_name,
+                "Figure 2: The figure shows the number of accidents that took place from 2006 to 2017 during the weekdays. Do note the bins in the legends. The maximum number of accident is less than what we have in Figure 1."],
+               [num_accidents_sa2_weekend_file_name,
+                "Figure 3: The figure shows the number of accidents that took place from 2006 to 2017 during the weekend. Do note the bins in the legends. The maximum number of accident is less than what we have in Figure 1. The bins tell that there were alot more fewer accidents on the weekends than on the weekdays and also as an overall total."]]
 
     text = """
     <p>
+        This task has been developed and analysed from the view point of a Spatial Data Analyst who has been given a task for analysing data
+        based on the following scenario, "The Government of Victoria has been informed by a third party that there has been an increase in the number of accidents through certain SA2 areas in Victoria and have been recommended
+        that they employ policies which either restrict the vehicular access or make those areas pedestrian only (excluding of public transport). The government wants us to verify these claims
+        and also to come up with a recommendation on what to do based on the data that the government has provided us. The government also wants us to find a reason that may be causing the rise in 
+        the number of accidents."
+    </p>
+    <p>
+        For this study we want to identify the SA2 area that has the highest number of accidents in all of the SA2 areas.
         The first visualization shows the number of accidents that took place in the shown SA2 regions from 2006 to 2016. 
         This is for all days (weekday and weekend) when the accidents took place.
         The second visualization shows the number of accidents that took place in the shown SA2 regions from 2006 to 2016 during 
@@ -968,8 +1158,8 @@ def spatial_visual_analysis(accidents_locations, sa2_areas_of_interest, html_con
 
     html_content += build_html_component_without_title(text)
 
-    html_content += build_html_component_with_html(image_link)
-    write_to_file(html_content, 'task3_922939.html', 'Task 3 922939')
+    html_content += build_html_component_with_html(html_layout_full_width(content))
+    write_to_html_file(html_content, 'task3_922939.html', 'Task 3 922939')
     return html_content, sa2_with_accident_counts
 
 
@@ -1002,9 +1192,8 @@ def spatial_autocorrelation(sa2_with_accident_counts, html_content):
                                   scheme='quantiles', cmap='summer', k=10, legend=True, linewidth=0.2)
     ax.set_title("Spatial Lag Number of Accidents from 2006 to 2016")
     ax.axis('off')
-    fig.savefig('output/spatial_lag_num_accidents_quantiles.jpg', dpi=200, cmap='summer', edgecolor='black',
-                linewidth=0.2, alpha=1, bbox_inches='tight')
-
+    # fig.savefig('output/spatial_lag_num_accidents_quantiles.png', dpi=200, cmap='summer', edgecolor='black', linewidth=0.2, alpha=1, bbox_inches='tight')
+    spatial_lag_num_acc_quant_file_name = write_to_image_file(fig, "spatial_lag_num_accidents_quantiles.png", True, 200)
     # The null hypothesis that we take is that the clusters are spatially randomly distributed.
     # We will be using the approach of Permutation Inference where Pysal will build randomized reference
     # distributions (999 is by default). We will then calculate a pseudo p-value from the randomized distributions
@@ -1035,8 +1224,8 @@ def spatial_autocorrelation(sa2_with_accident_counts, html_content):
     sa2_with_accident_counts.plot(column='YB_LABELED', cmap='binary', edgecolor='grey', legend=True, ax=ax)
     ax.set_title("High number of accidents and low number of accidents segmentation from 2006 to 2016")
     ax.axis('off')
-    fig.savefig('output/high_low_segments_num_accidents.jpg', dpi=500, cmap='summer', edgecolor='black', linewidth=0.2,
-                alpha=1, bbox_inches='tight')
+    # fig.savefig('output/high_low_segments_num_accidents.png', dpi=500, cmap='summer', edgecolor='black', linewidth=0.2, alpha=1, bbox_inches='tight')
+    high_low_seg_num_acc_file_name = write_to_image_file(fig, "high_low_segments_num_accidents.png", True, 500)
 
     # We want to find our joint count statistics, so we need the data in a binary form
     # In addition, Pysal will build randomized distributions to compare our observed (actual) results against.
@@ -1066,55 +1255,20 @@ def spatial_autocorrelation(sa2_with_accident_counts, html_content):
     plt.vlines(joint_counts.bb, 0, 0.075, color='r')
     plt.vlines(joint_counts.mean_bb, 0, 0.075)
     plt.xlabel('Number of Black-Black Joins')
-    fig.savefig('output/kdeplot.jpg', dpi=100, bbox_inches='tight')
+    # fig.savefig('output/kdeplot.png', dpi=100, bbox_inches='tight')
+    kdep_plot_file_name = write_to_image_file(fig, "kdeplot.png", False, 100)
 
     # The density distribution plot of the randomized runs shows that our actual result (red line)
     # is an extreme value and is not within the distribution we can reject the null hypothesis that
     # the accident numbers in the sa2 areas are spatially random, when infact they are autocorrelated.
     # The pseudo p-value also supports our claim with a result of 0.001.
 
-    image_link = """
-    <div class='row'>
-        <div class='col-md-12'>
-            <img src='{0}' class='img-fluid'/>
-            <center>
-                <label>
-                    Figure 4: This figure shows the spatial lag that has been calculated using Queen contiguity statistic which 
-                    builds an index where if an area is a neighbor is given a value of 1 and 0 if not. Then the spatial lag is calculated
-                    which tells how similar an area is similar to its neighbors.
-                </label>
-            </center>
-        </div>
-    </div>
-    <div class='row'>
-        <div class='col-md-12'>
-            <img src='{1}' class='img-fluid'/>
-            <center>
-                <label>
-                    Figure 5: This figure shows the SA2 areas being categorized as being higher than the median value of the spatial lag (black in color)
-                    and lower than the spatial lag (white in color). We are regarding the black areas as having high number of accidents, while the 
-                    white areas as having low number of accidents. We can already see that there are clusters grouped together. We will statistically
-                    prove this in the next figure.
-                </label>
-            </center>
-        </div>
-    </div>    
-    <div class='row'>    
-        <div class='col-md-12'>
-            <center><img src='{2}' class='img-fluid'/></center>
-            <center>
-                <label>
-                    Figure 6: The figure shows the results of the statisticall p-value test that we have done in order to invalidate the null hypothesis.
-                    We have used Pysal, and it generates by default 999 randomized  clusters and then finds their mean and other values. The density plot 
-                    shown in the figure is of the randomized generations, and the black line shows the mean. However, our own actual value is an extreme 
-                    value and this proves that the Null-hypotheses is wrong and that we can reject it, therefore it can be said that our data contains
-                    clusters that are closely grouped together, leading to the fact that those SA2 areas are similar to each other.
-                </label>
-            </center>
-        </div>
-    </div>
-
-    """.format('spatial_lag_num_accidents_quantiles.jpg', 'high_low_segments_num_accidents.jpg', 'kdeplot.jpg')
+    content = [[spatial_lag_num_acc_quant_file_name,
+                "Figure 4: This figure shows the spatial lag that has been calculated using Queen contiguity statistic which builds an index where if an area is a neighbor is given a value of 1 and 0 if not. Then the spatial lag is calculated which tells how similar an area is similar to its neighbors."],
+               [high_low_seg_num_acc_file_name,
+                "Figure 5: This figure shows the SA2 areas being categorized as being higher than the median value of the spatial lag (black in color) and lower than the spatial lag (white in color). We are regarding the black areas as having high number of accidents, while the white areas as having low number of accidents. We can already see that there are clusters grouped together. We will statistically prove this in the next figure."],
+               [kdep_plot_file_name,
+                "Figure 6: The figure shows the results of the statisticall p-value test that we have done in order to invalidate the null hypothesis. We have used Pysal, and it generates by default 999 randomized  clusters and then finds their mean and other values. The density plot shown in the figure is of the randomized generations, and the black line shows the mean. However, our own actual value is an extreme value and this proves that the Null-hypotheses is wrong and that we can reject it, therefore it can be said that our data contains clusters that are closely grouped together, leading to the fact that those SA2 areas are similar to each other."]]
 
     text = """
     <p>
@@ -1126,12 +1280,12 @@ def spatial_autocorrelation(sa2_with_accident_counts, html_content):
     """
     html_content += build_html_component('', 'Spatial Autocorrelation Calculation (Advanced')
     html_content += build_html_component_without_title(text)
-    html_content += build_html_component_with_html(image_link)
-    write_to_file(html_content, 'task3_922939.html', 'Task 3 922939')
+    html_content += build_html_component_with_html(html_layout_full_width(content))
+    write_to_html_file(html_content, 'task3_922939.html', 'Task 3 922939')
     return html_content, sa2_with_accident_counts
 
 
-def plot(X, model):
+def plot_db_scan(X, model):
     """
     This code plots the clustered points. This function has been inspired from the
     DBSCAN example (https://scikit-learn.org/stable/auto_examples/cluster/plot_dbscan.html) and the example provide
@@ -1143,7 +1297,7 @@ def plot(X, model):
     labels = model.labels_
     core_samples_mask = np.zeros_like(model.labels_, dtype=bool)
     core_samples_mask[model.core_sample_indices_] = True
-
+    print(len(labels))
     # Black removed and is used for noise instead.
     unique_labels = set(labels)
     colors = [plt.cm.Spectral(each)
@@ -1162,7 +1316,9 @@ def plot(X, model):
         xy = X[class_member_mask & ~core_samples_mask]
         plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=tuple(col),
                  markeredgecolor='k', markersize=6)
-        plt.savefig('output/dbscan_cluster.jpg', dpi=200, bbox_inches='tight')
+        plt.savefig('output/dbscan_cluster1.png', dpi=200, bbox_inches='tight')
+        return write_to_image_file(plt, "dbscan_cluster.png", False, 100)
+
 
 
 def classify_helmet_belt_worn(x):
@@ -1224,23 +1380,18 @@ def clustering_analysis(accidents_location_data_frame, road_surface_data_frame, 
                                                                 ['TypeOfDayOfWeek', 'LATITUDE', 'LONGITUDE'])
     accidents_locations_to_be_clustered.LATITUDE = accidents_locations_to_be_clustered.LATITUDE.astype(float)
     accidents_locations_to_be_clustered.LONGITUDE = accidents_locations_to_be_clustered.LONGITUDE.astype(float)
-    coords = np.vstack((accidents_locations_to_be_clustered[['LATITUDE', 'LONGITUDE']]['LATITUDE'].values,
-                        accidents_locations_to_be_clustered[['LATITUDE', 'LONGITUDE']]['LONGITUDE'].values)).T
+    coords_db_scan = np.vstack((accidents_locations_to_be_clustered[['LATITUDE', 'LONGITUDE']]['LATITUDE'].values,
+                                accidents_locations_to_be_clustered[['LATITUDE', 'LONGITUDE']]['LONGITUDE'].values)).T
 
     # define the number of kilometers in one radian
     kms_per_radian = 6371.0088
     epsilon = 0.05 / kms_per_radian
 
-    db = DBSCAN(eps=epsilon, min_samples=3, metric='haversine').fit(np.radians(coords))
-    '''cluster_labels = db.labels_
+    db = DBSCAN(eps=epsilon, min_samples=3, metric='haversine').fit(np.radians(coords_db_scan))
+    cluster_labels = db.labels_
     # get the number of clusters
     num_clusters = len(set(cluster_labels))
     # set(cluster_labels)
-    num_clusters'''
-
-    # The results of the DBSCAN gives us 29 clusters. Since we are clustering on the longitude and
-    # latitude the accident locations that are spatially closer together are clustered together.
-    # plot(coords, db)
 
     # In order to further understand what may have caused the accidents, I will be looking at a
     # number of variables such as the road condition, atmospheric conditions, information about the drivers, etc...
@@ -1273,11 +1424,11 @@ def clustering_analysis(accidents_location_data_frame, road_surface_data_frame, 
     # print("{}, {}, {}, {}".format(suburb, greater, city, state))
 
     m = folium.Map(
-        location=[coords[0][0],
-                  coords[0][1]],
+        location=[coords_db_scan[0][0],
+                  coords_db_scan[0][1]],
         zoom_start=15)
 
-    for coord in coords:
+    for coord in coords_db_scan:
         folium.CircleMarker(
             location=[coord[0], coord[1]],
             radius=5,
@@ -1285,9 +1436,11 @@ def clustering_analysis(accidents_location_data_frame, road_surface_data_frame, 
             fill=True,
             fill_color='#ff0000'
         ).add_to(m)
-    m.save('output/folium_map_cluster.html')
-    folium_map = m._repr_html_()
 
+    # m.save('output/folium_map_cluster.html')
+    write_folium_to_html_file(m, "folium_map_cluster.html")
+
+    folium_map = m._repr_html_()
 
     accidents_location_data_frame.rename(index=str, columns={'ACCIDENT_NO': 'AccidentNu'}, inplace=True)
     accidents_location_data_frame.head(3)
@@ -1332,130 +1485,261 @@ def clustering_analysis(accidents_location_data_frame, road_surface_data_frame, 
     helmet_belt_worn_html = group_by_data(accidents_from_max_accidents_sa2_drivers, ['HELMET_BELT_WORN_CAT']).to_html()
     group_by_helmet_worn = group_by_data(accidents_from_max_accidents_sa2_drivers, ['HELMET_BELT_WORN_CAT'])
 
-    image_link = """
-    <div class='row'>
-        <div class='col-md-12'>
-            <img src='{0}' class='img-fluid'/>
-            <center>
-                <label>
-                    Figure 4: This figure shows the spatial lag that has been calculated using Queen contiguity statistic which 
-                    builds an index where if an area is a neighbor is given a value of 1 and 0 if not. Then the spatial lag is calculated
-                    which tells how similar an area is similar to its neighbors.
-                </label>
-            </center>
-        </div>
-    </div>
-    <br /><br />
-    <div class='row'>    
-        <div class='col-md-12'>
+    # something has broken in the plotting of the dbscan and is not showing the correct amount of clusters. have to investigate further.
+    '''dbscan_file_name = plot_db_scan(coords_db_scan, db)
+    content = [[dbscan_file_name,
+                "Figure 6: This figure shows the of the DBSCAN clustering algorithm."
+                ]]
+    html_string = html_layout_full_width(content)'''
 
-            <div class='row'>
-                <div class='col-md-12'>
-                <p>
-                The Folium map shows where the clusters are exactly located further helping us in analyzing the data. We can see that 
-                there is a high concentration of accidents on La Trobe Street so will be further examining the data for it.
-                We decided to analyze this particular area because it contains the highest number of accidents in all of the SA2 areas.
-                </p>
-                </div>
-            </div>
+    content = [
+        [
+            " <p>The Folium map shows where the clusters are exactly located further helping us in analyzing the data and our analysis from the previous operations has led us to the SA2 area {0}. This area will be further examined in order to understand the data.</p>".format(
+                accidents_from_max_accidents_sa2.iloc[0]['SA2'])],
+        [folium_map]
+    ]
+    html_string = html_layout_full_width_single_row(content)
+    '''
+    content = [[
+        "<p>These tables further give a better understanding of our accidents data that took place in {0} </p>".format(
+            accidents_from_max_accidents_sa2.iloc[0]['SA2'])]]
+    html_string += html_layout_full_width_single_row(content)
 
-            <div class='row'>
-                <div class='col-md-12'>
-                {1}
-                </div>
-            </div>
-
-        </div>
-    </div>    
-
-    <br /><br />
-    <div class='row'>    
-        <div class='col-md-12'>
-
-            <div class='row'>
-                <div class='col-md-12'>
-                <p>
-                    These table further give a better understanding of our accidents data that took place on La Trobe
-                    Street.
-                </p>
-                </div>
-            </div>
-
-            <div class='row'>
-                <div class='col-md-4'>
-                <center>
-                    {2}
-                    <br />
-                    Table 1: The table shows the number of parties that were involved in the accident. This further tells us how serious the accident was
-                    due to the number of parties that were involved.
-                </center>
-
-                </div>
-                <div class='col-md-4'>
-                <center>
-                    {3}
-                    <br />
-                    Table 2: The table shows the results of what the atmospheric and road conditions were at the time of the accident. We can see
-                    that the majority of the severe accidents took place when the weather was clear and the road surface condition was dry.
-                    There must be some other reason as to why the accidents took place.
-                </center>
-                </div>
-                <div class='col-md-4'>
-                <center>
-                    {4}
-                    <br />
-                    Table 3: The table shows the number of drivers and their age groups who were involved in the accidents. 
-                    The average age of the drivers was {7}.
-                 </center>
-                </div>
-            </div>
-
-        </div>
-    </div>    
-
-    <br /><br />
-    <div class='row'>    
-        <div class='col-md-12'>
-
-            <div class='row'>
-                <div class='col-md-6'>
-                <center>
-                {5}
-                <br />
-                Table 4: The table shows the gender statistics of drivers.
-                </center>
-                </div>
-
-                <div class='col-md-6'>
-                <center>
-                {6}
-                Table 5: The table shows the how many people wore their seatbelts/helmets and how many didnt.
-                </center>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    """.format('dbscan_cluster.jpg', folium_map, number_parties_involved_html, group_by_atmos_surface_html,
-               age_group_html, group_by_sex_html, helmet_belt_worn_html, average_driver_age)
+    content = [[number_parties_involved_html,
+                "Table 1: The table shows the number of parties that were involved in the accident. This further tells us how serious the accident was due to the number of parties that were involved."],
+               [group_by_atmos_surface_html,
+                "Table 2: The table shows the results of what the atmospheric and road conditions were at the time of the accident. We can see that the majority of the severe accidents took place when the weather was clear and the road surface condition was dry. There must be some other reason as to why the accidents took place."],
+               [age_group_html,
+                "Table 3: The table shows the number of drivers and their age groups who were involved in the accidents. The average age of the drivers was {0}.".format(average_driver_age)]]
+    html_string += html_layout_quarter_width(content)
+    '''
 
     text = """
     <p>
-        The results of the DBSCAN gives us 29 clusters. Since we are clustering on the longitude and latitude the accident locations that are
+        The results of the DBSCAN gives us {0} clusters. Since we are clustering on the longitude and latitude the accident locations that are
         spatially closer together are clustered together.
 
         Once we have the clusters, we had to further analyze what the reason may be why there were so many accidents. 
         In order to conduct this I looked at a number of variables such as the road condition, atmospheric conditions, information
         about the drivers, etc...
     </p>    
-    """
+    """.format(num_clusters)
     html_content += build_html_component('', 'Clustering Analysis (More Advanced)')
 
     html_content += build_html_component_without_title(text)
 
-    html_content += build_html_component_with_html(image_link)
-    return group_by_num_parties, group_by_atmos_surface, m, group_by_age_group, group_by_sex, group_by_helmet_worn, coords, db, accidents_from_max_accidents_sa2, group_by_atmos_cond, group_by_road_surface, html_content
+    html_content += build_html_component_with_html(html_string)
+    return group_by_num_parties, group_by_atmos_surface, m, group_by_age_group, group_by_sex, group_by_helmet_worn, coords_db_scan, db, accidents_from_max_accidents_sa2, group_by_atmos_cond, group_by_road_surface, html_content
+
+
+def further_analysis_graphs(group_by_num_parties, group_by_atmos_surface, m, group_by_age_group, group_by_sex,
+                            group_by_helmet_worn, coords, db, accidents_from_max_accidents_sa2, group_by_atmos_cond,
+                            group_by_road_surface, html_content, accidents_data_frame):
+    """
+    This function further analyses the data from different aspects and try to figure out the reason as to
+    why there are so many accidents.
+    :param group_by_num_parties:
+    :param group_by_atmos_surface:
+    :param m:
+    :param group_by_age_group:
+    :param group_by_sex:
+    :param group_by_helmet_worn:
+    :param coords:
+    :param db:
+    :param accidents_from_max_accidents_sa2:
+    :param group_by_atmos_cond:
+    :param group_by_road_surface:
+    :param html_content:
+    :param accidents_data_frame:
+    :return:
+    """
+    # Get the number of accidents grouped by street name
+    streets = group_by_data(accidents_from_max_accidents_sa2, ['ROAD_NAME'])
+    streets = streets.reset_index(drop=True).sort_values('count', ascending=False)
+
+    # Get those streets that have number of accidents greate than the median
+    median = np.median(streets['count'])
+    streets_greater_than_median = streets[streets['count'] > median]
+    streets_accidents = list(streets_greater_than_median['ROAD_NAME'])
+    # The correlation between number of accidents and hour type is relatively strongly positive correlated. The coefficient value that we get
+    # is -0.899849793853915. There is significant negative correlation between the streets and the number of accidents. What this means is that
+    # the two variables of streets and the number of accidents are inverse of each other, however, due to the nature of the data and how it is
+    # plotted, infact it is actually showing positive correlation because, the streets where the majority of the accidents have taken place
+    # show that those streets have a higher propencity of having more accidents than the other streets where the number of accidents is
+    # significantly lower. The Government of Victoria should look at trying to make these streets more safer.
+    count_streets_accidents = list(streets_greater_than_median['count'])
+    streets_accidents_r = calculate_correlation_coefficient(np.arange(len(streets_accidents)), count_streets_accidents)
+    file_name = plot_bar_plot(streets_accidents, count_streets_accidents, 'Hour Type', 'Number of accidents',
+                              'Number of accidents by street')
+    street_accidents_image_file = """
+        <img src='file:{1}{0}' class='img-fluid'/>
+
+    """.format(file_name, os.sep)
+
+    '''
+    # Get the accidents on the week days and the weekends
+    accidents_on_weekdays = accidents_from_max_accidents_sa2[accidents_from_max_accidents_sa2['TypeOfDayOfWeek']=='Week Day']
+    accidents_on_weekends = accidents_from_max_accidents_sa2[accidents_from_max_accidents_sa2['TypeOfDayOfWeek']=='Weekend']
+
+    accidents_by_days = pd.concat([group_by_data(accidents_on_weekdays, ['DayOfWeek']),group_by_data(accidents_on_weekends, ['DayOfWeek'])],ignore_index=True)
+    print(accidents_by_days)
+    accidents_by_days.plot(kind='bar')
+    '''
+
+    # Get the time and light conditions
+    time_light_conditions = accidents_data_frame[['ACCIDENT_NO', 'ACCIDENTTIME', 'Light Condition Desc']]
+    time_light_conditions.rename(index=str,
+                                 columns={'ACCIDENT_NO': 'AccidentNu', 'Light Condition Desc': 'LIGHT_CONDITION'},
+                                 inplace=True)
+    time_light_conditions.head(3)
+
+    time_light_conditions = pd.merge(accidents_from_max_accidents_sa2, time_light_conditions,
+                                     on="AccidentNu",
+                                     how="inner")
+    time_light = group_by_data(time_light_conditions, ['LIGHT_CONDITION'])
+    time_light_conditions['HOUR_OF_DAY'] = time_light_conditions.ACCIDENTTIME.apply(getTypeOfHourDay)
+    hour_light = group_by_data(time_light_conditions, ['HOUR_OF_DAY'])
+    hour_of_day = list(hour_light.HOUR_OF_DAY)
+    count_hour_of_day = list(hour_light['count'])
+    # The correlation between number of accidents and hour type is relatively strongly positive correlated. The coefficient value that we get
+    # is -0.09062326443452029. There is no correlation between the time of day and the number of accidents. There is no specific time of day where
+    # most of the accidents took place. The accidents are pretty much spread out.
+    hour_of_day_r = calculate_correlation_coefficient(np.arange(len(hour_of_day)), count_hour_of_day)
+    file_name = plot_bar_plot(hour_of_day, count_hour_of_day, 'Hour Type', 'Number of accidents',
+                              'Number of accidents by time of day')
+    hour_of_day_image_file = """
+        <img src='file:{1}{0}' class='img-fluid'/>
+
+    """.format(file_name, os.sep)
+
+    content = [[street_accidents_image_file,
+                "Figure 7: The correlation between number of accidents and streets is relatively strongly positive correlated. The coefficient value that we get is {0}. There is significant negative correlation between the streets and the number of accidents. What this means is that the two variables of streets and the number of accidents are inverse of each other, however, due to the nature of the data and how it is plotted, infact it is actually showing positive correlation because, the streets where the majority of the accidents have taken placeshow that those streets have a higher propencity of having more accidents than the other streets where the number of accidents is significantly lower. The Government of Victoria should look at trying to make these streets more safer.".format(
+                    streets_accidents_r)
+                ],
+               [hour_of_day_image_file,
+                "Figure 8: The correlation between number of accidents and hour type is relatively strongly positive correlated. The coefficient value that we get is {0}. There is no correlation between the time of day and the number of accidents. There is no specific time of day where most of the accidents took place. The accidents are pretty much spread out.".format(
+                    hour_of_day_r)]]
+    html_content += html_layout_half_width(content)
+
+    light_condition = list(time_light['LIGHT_CONDITION'].values)
+    count_time_light = list(time_light['count'].values)
+    # The correlation between number of accidents and age group are mostly not correlated. The coefficient value is extremely
+    # small and the value is 0.18816035355396343. There is no correlation at all. The r value is too small.
+    light_condition_r = calculate_correlation_coefficient(np.arange(len(light_condition)), count_time_light)
+    file_name = plot_bar_plot(light_condition, count_time_light, 'Light Condition', 'Number of accidents',
+                              'Number of accidents by light condition')
+
+    light_condition_image_file = """
+        <img src='file:{1}{0}' class='img-fluid'/>
+
+    """.format(file_name, os.sep)
+
+    # Getting the age groups
+    age_group = list(group_by_age_group['Age Group'].values)
+    count_age_group = list(group_by_age_group['count'].values)
+    # The correlation between number of accidents and age group is relatively weakly negative correlated. The coefficient value that we get
+    # is 0.08708851613349221. There is no correlation at all, but i can see a normal like distribution here.
+    age_group_r = calculate_correlation_coefficient(np.arange(len(age_group)), count_age_group)
+    file_name = plot_bar_plot(age_group, count_age_group, 'Age Group', 'Number of accidents',
+                              'Number of accidents by age group')
+
+    age_group_image_file = """
+        <img src='file:{1}{0}' class='img-fluid'/>
+
+    """.format(file_name, os.sep)
+
+    content = [[light_condition_image_file,
+                "Figure 9: The correlation between number of accidents and age group are mostly not correlated. The coefficient value is extremely small and the value is {0}. There is no correlation at all. The r value is too small.".format(
+                    light_condition_r)
+                ],
+               [age_group_image_file,
+                "Figure 10: The correlation between number of accidents and age group is relatively weakly negative correlated. The coefficient value that we get is {0}. There is no correlation at all, but i can see a normal like distribution here.".format(
+                    age_group_r)]]
+    html_content += html_layout_half_width(content)
+
+    # Getting the atmospheric conditions
+    atmos_cond_desc = list(group_by_atmos_cond['AtmosCondDesc'].values)
+    count_atmos_cond_desc = list(group_by_atmos_cond['count'].values)
+    # The correlation between number of accidents and the atmospheric condition is strongly negative correlated. The coefficient value that we get
+    # is -0.6172242797385701. What this means is that the two variables are inverse of each other. This table shows that the accidents happening
+    # on a clear day have a higher possibility than in any other atmospheric condition. However, we can not conclude that this is the sole reason
+    # for the accidents happening. This might just be a coincidence that the accidents happened when the day was clear.
+    atmos_cond_desc_r = calculate_correlation_coefficient(np.arange(len(atmos_cond_desc)), count_atmos_cond_desc)
+    file_name = plot_bar_plot(atmos_cond_desc, count_atmos_cond_desc, 'Atmospheric Condition', 'Number of accidents',
+                              'Number of accidents atmospheric condition')
+    atmos_cond_desc_image_file = """
+        <img src='file:{1}{0}' class='img-fluid'/>
+
+    """.format(file_name, os.sep)
+
+    # Getting the road surface conditions
+    surface_cond_desc = list(group_by_road_surface['SurfaceCondDesc'].values)
+    count_surface_cond_desc = list(group_by_road_surface['count'].values)
+    # The correlation between number of accidents and the road surface condition is strongly negative correlated. The coefficient value that we get
+    # is -0.6955500701442592. What this means is that the two variables are inverse of each other.
+
+    surface_cond_desc_r = calculate_correlation_coefficient(np.arange(len(surface_cond_desc)), count_surface_cond_desc)
+    file_name = plot_bar_plot(surface_cond_desc, count_surface_cond_desc, 'Road Surface Condition',
+                              'Number of accidents', 'Number of accidents by road surface condition')
+
+    count_surface_cond_image_file = """
+        <img src='file:{1}{0}' class='img-fluid'/>
+
+    """.format(file_name, os.sep)
+
+    content = [[atmos_cond_desc_image_file,
+                "Figure 11: The correlation between number of accidents and the atmospheric condition is strongly negative correlated. The coefficient value that we get is {0}. What this means is that the two variables are inverse of each other. This table shows that the accidents happening on a clear day have a higher possibility than in any other atmospheric condition. However, we can not conclude that this is the sole reason for the accidents happening. This might just be a coincidence that the accidents happened when the day was clear.".format(
+                    atmos_cond_desc_r)
+                ],
+               [count_surface_cond_image_file,
+                "Figure 12: The correlation between number of accidents and the road surface condition is strongly negative correlated. The coefficient value that we get is {0}. What this means is that the two variables are inverse of each other.".format(
+                    surface_cond_desc_r)]]
+    html_content += html_layout_half_width(content)
+
+    accidents_data_frame_copy = accidents_data_frame.copy(deep=True)
+    accidents_data_frame_copy.rename(index=str, columns={'ACCIDENT_NO': 'AccidentNu'}, inplace=True)
+
+    # I want to get the years from the accident.csv csv file because i want to build visualization against the year.
+    # This will let me get the trend of the number of accidents over the years from 2006 to 2016.
+    accidents_with_year = pd.merge(accidents_from_max_accidents_sa2, accidents_data_frame_copy,
+                                   on="AccidentNu",
+                                   how="inner")
+    accidents_with_year = get_data_filtered_accident_date_for_year(accidents_with_year, '2017', False)
+
+    accidents_with_year = get_columns_from_data(accidents_with_year, ['AccidentNu', 'ACCIDENTDATE'])
+    accidents_with_year['YEAR'] = accidents_with_year.ACCIDENTDATE.apply(lambda x: str(parse(x).year))
+    accidents_with_year.drop(columns=['ACCIDENTDATE'], axis=1, inplace=True)
+    grouped_by_years = group_by_data(accidents_with_year, ['YEAR'])
+
+    # The results of this are quite unexpected. The graph shows that there has been a downward trend in the number of accidents over the years
+    # from 2006 to 2016. Infact in 2016 the lowest number of accidents took place. However, despite the downward trend, some actions do need to
+    # be taken by the Government of Victoria. The graph for the number of accidents by street shows us that work
+
+    data = grouped_by_years['count'].values
+    start_index = 2006
+    end_index = 2017
+    title = 'Trend of Number of Accidents by Year'
+    x_axis_label = 'Years'
+    y_axis_label = 'Number of Accidents'
+
+    file_name = plot_line_plot(data, start_index, end_index, x_axis_label, y_axis_label, title)
+
+    trend_accidents_image_file = """
+        <img src='file:{1}{0}' class='img-fluid'/>
+
+    """.format(file_name, os.sep)
+
+    content = [[trend_accidents_image_file,
+                "Figure 13: The results of this are quite unexpected. The graph shows that there has been a downward trend in the number of accidents over the years from 2006 to 2016. Infact in 2016 the lowest number of accidents took place. However, despite the downward trend, some actions do need to be taken by the Government of Victoria."
+                ]]
+
+    html_content += html_layout_half_width(content)
+
+    html_content += build_html_component(
+        "Figures 7, 11, and 12 all have negative correlation, but as discussed in the report earlier, we have to be careful in concluding based on the data because the data might mean something else altogether and we may get wrong results. Furthermore, Figure 13 shows that there has been a decline in the number of accidents, rather than an increase as suggested by the third party. However, there are high risk streets where the number of accidents is quite high and should be controlled and brought down. These streets are Flinders Street, Collins Street, Elizabeth Street and Londsdale Street. We recommend that the government take steps in order to further make the streets safer. ",
+        "Conclusion")
+
+    write_to_html_file(html_content, 'task3_922939.html', 'Task 3 922939')
 
 
 def plot_scatter_plot(x, y, x_axis_label, y_axis_label, title):
@@ -1476,8 +1760,9 @@ def plot_scatter_plot(x, y, x_axis_label, y_axis_label, title):
     ax.set_title(title)
     # ax.legend(loc='upper right', frameon=True)
     plt.show()
-    file_name = ((((title + '.jpg').replace('/', ''))).replace(' ', '_')).lower()
-    fig.savefig('output/' + file_name, dpi=100, bbox_inches='tight')
+    file_name = ((((title + '.png').replace('/', ''))).replace(' ', '_')).lower()
+    # fig.savefig('output/' + file_name, dpi=100, bbox_inches='tight')
+    return write_to_image_file(fig, file_name, False, 100)
 
 
 def plot_bar_plot(x, y, x_axis_label, y_axis_label, title):
@@ -1488,6 +1773,7 @@ def plot_bar_plot(x, y, x_axis_label, y_axis_label, title):
     :param x_axis_label: list of labels for x
     :param y_axis_label: list of labels for y
     :param title: string value for the title of the plot
+    :return: the filename of the figure that has been saved.
     """
     fig, ax = plt.subplots()
     ax.bar(x, y)
@@ -1498,8 +1784,33 @@ def plot_bar_plot(x, y, x_axis_label, y_axis_label, title):
     ax.set_title(title)
     # ax.legend(loc='upper right', frameon=True)
     plt.show()
-    file_name = ((((title + '.jpg').replace('/', ''))).replace(' ', '_')).lower()
-    fig.savefig('output/' + file_name, dpi=100, bbox_inches='tight')
+    file_name = ((((title + '.png').replace('/', ''))).replace(' ', '_')).lower()
+    # fig.savefig('output/' + file_name, dpi=100, bbox_inches='tight')
+    return write_to_image_file(fig, file_name, False, 100)
+
+
+def plot_line_plot(data, start_index, end_index, x_axis_label, y_axis_label, title):
+    fig, ax = plt.subplots()
+    index = np.arange(end_index - start_index)
+    x_labels = []
+    for i in range(start_index, end_index):
+        x_labels.append(str(i))
+    # The results of this are quite unexpected. The graph shows that there has been a downward trend in the number of accidents over the years
+    # from 2006 to 2016. Infact in 2016 the lowest number of accidents took place. However, despite the downward trend, some actions do need to
+    # be taken by the Government of Victoria.
+
+    ax.plot(index, data, label='Number of Accidents')
+    ax.set_xlabel(x_axis_label, fontsize=10)
+    ax.set_ylabel(y_axis_label, fontsize=10)
+    ax.set_xticks(index)
+    ax.set_xticklabels(x_labels, fontsize=10, rotation=30)
+    ax.set_title(title)
+    ax.legend(loc='upper right', frameon=True)
+    plt.show()
+
+    file_name = ((((title + '.png').replace('/', ''))).replace(' ', '_')).lower()
+    # fig.savefig('output/' + file_name, dpi=100, bbox_inches='tight')
+    return write_to_image_file(fig, file_name, False, 100)
 
 
 def calculate_correlation_coefficient(x, y):
