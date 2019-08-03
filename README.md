@@ -10,109 +10,34 @@ input files is given below.
 
 ## List of Files
 input folder: This folder contains all of the data files that are required by this project.
-ACCIDENT.csv
-ACCIDENT_CHAINAGE.csv
-ACCIDENT_EVENT.csv
-ACCIDENT_LOCATION.csv
-ATMOSPHERIC_COND.csv
-NODE.csv
-NODE_ID_COMPLEX_INT_ID.csv
-PERSON.csv
-ROAD_SURFACE_COND.csv
-Statistic Checks.csv
-SUBDCA.csv
-VEHICLE.csv
+* ACCIDENT.csv
+* ACCIDENT_CHAINAGE.csv
+* ACCIDENT_EVENT.csv
+* ACCIDENT_LOCATION.csv
+* ATMOSPHERIC_COND.csv
+* NODE.csv
+* NODE_ID_COMPLEX_INT_ID.csv
+* PERSON.csv
+* ROAD_SURFACE_COND.csv
+* Statistic Checks.csv
+* SUBDCA.csv
+* VEHICLE.csv
+* SA2_2016_AUST.shp
+	* SA2_2016_AUST.dbf
+	* SA2_2016_AUST.prj
+	* SA2_2016_AUST.shx
+	* SA2_2016_AUST.xml
+
 
 http://data.vicroads.vic.gov.au/metadata/crashstats_user_guide_and_appendices.pdf
 http://www.abs.gov.au/ausstats/abs@.nsf/Latestproducts/88F6A0EDEB8879C0CA257801000C64D9
 
-output folder: This folder contains all the files and data that this project generates as a result
+output folder: This folder contains all the files and data that this project generates as a result.
+
+The following are the notebook and the module Python file that are executable.
 assign2.ipynb
 assign2_modules.py
 
-input
 
-## Getting Started
-
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
-
-### Prerequisites
-
-What things you need to install the software and how to install them
-
-```
-Give examples
-```
-
-### Installing
-
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
-## Built With
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
-
-## Authors
-
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
-
+The HTML webpages of the report that were generated have been converted into a pdf format and the name of the file is 
+Spatial Information Programming Final Report.pdf
