@@ -54,6 +54,7 @@ def read_csv_file(csv_file_name, required_columns):
                     list(data_frame.columns).index(column)
                 except ValueError as value_error:
                     found_invalid_columns = True
+
                     invalid_columns.append(column)
 
             if found_invalid_columns:
@@ -1382,7 +1383,8 @@ def clustering_analysis(accidents_location_data_frame, road_surface_data_frame, 
     accidents_locations_to_be_clustered.LONGITUDE = accidents_locations_to_be_clustered.LONGITUDE.astype(float)
     coords_db_scan = np.vstack((accidents_locations_to_be_clustered[['LATITUDE', 'LONGITUDE']]['LATITUDE'].values,
                                 accidents_locations_to_be_clustered[['LATITUDE', 'LONGITUDE']]['LONGITUDE'].values)).T
-
+    print('coords_db_scan')
+    print(coords_db_scan)
     # define the number of kilometers in one radian
     kms_per_radian = 6371.0088
     epsilon = 0.05 / kms_per_radian
@@ -1581,7 +1583,8 @@ def further_analysis_graphs(group_by_num_parties, group_by_atmos_surface, m, gro
     accidents_on_weekdays = accidents_from_max_accidents_sa2[accidents_from_max_accidents_sa2['TypeOfDayOfWeek']=='Week Day']
     accidents_on_weekends = accidents_from_max_accidents_sa2[accidents_from_max_accidents_sa2['TypeOfDayOfWeek']=='Weekend']
 
-    accidents_by_days = pd.concat([group_by_data(accidents_on_weekdays, ['DayOfWeek']),group_by_data(accidents_on_weekends, ['DayOfWeek'])],ignore_index=True)
+    accidents_by_days = pd.c
+    oncat([group_by_data(accidents_on_weekdays, ['DayOfWeek']),group_by_data(accidents_on_weekends, ['DayOfWeek'])],ignore_index=True)
     print(accidents_by_days)
     accidents_by_days.plot(kind='bar')
     '''
@@ -1821,7 +1824,7 @@ def calculate_correlation_coefficient(x, y):
     :return: correlation coefficient
     """
     numerator = np.sum((x - np.mean(x)) * (y - np.mean(y)))
-    denominator = np.sqrt(np.sum((x - np.mean(x)) ** 2) * np.sum((y - np.mean(y)) ** 2))
+    denominator = np.sqrt(np.sum((x - np.mean(x)) ** 2) * np.sum((y - np.mean(y)) rop** 2))
     if denominator > 0:
         return numerator / denominator
     else:
